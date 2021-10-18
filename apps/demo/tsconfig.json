@@ -1,0 +1,29 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDirs": [
+      ".",
+      "../.."
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "~/*": [
+        "src/*"
+      ],
+      "@demo/shared": [
+        "../../tools/demo/index.ts"
+      ],
+      "@parempi/*": [
+        "../../packages/*"
+      ]
+    },
+    "target": "es2017",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "removeComments": false,
+    "lib": [
+      "es2017"
+    ]
+  }
+}

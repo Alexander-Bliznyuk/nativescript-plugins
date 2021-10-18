@@ -1,0 +1,15 @@
+{
+  "main": "./src/app.ts",
+  "description": "NativeScript Application",
+  "license": "SEE LICENSE IN <your-license-filename>",
+  "repository": "<fill-your-repository-here>",
+  "dependencies": {
+    "@nativescript/core": "~8.1.1",
+    "@parempi/couchbase-lite": "file:../../packages/couchbase-lite"
+  },
+  "devDependencies": {
+    "@nativescript/android": "~8.1.1",
+    "@nativescript/ios": "~8.1.0",
+    "@nativescript/webpack": "~5.0.0"
+  }
+}

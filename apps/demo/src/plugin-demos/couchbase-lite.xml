@@ -1,0 +1,13 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo" class="page">
+    <Page.actionBar>
+        <ActionBar title="couchbase-lite" icon="" class="action-bar">
+        </ActionBar>
+    </Page.actionBar>
+    <StackLayout class="p-20">
+        <ScrollView class="h-full">
+          <StackLayout>
+            <Button text="Show couchbase-lite version" tap="{{ showCbLiteVersion }}" class="btn btn-primary"/>
+          </StackLayout>
+        </ScrollView>
+    </StackLayout>
+</Page>
