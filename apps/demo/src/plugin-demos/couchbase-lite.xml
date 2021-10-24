@@ -7,6 +7,7 @@
         <ScrollView class="h-full">
           <StackLayout>
             <Button text="Show couchbase-lite version" tap="{{ showCbLiteVersion }}" class="btn btn-primary"/>
+            <Button text="Open a to-do list example" tap="{{ openToDoList }}" class="btn btn-primary"/>
           </StackLayout>
         </ScrollView>
     </StackLayout>

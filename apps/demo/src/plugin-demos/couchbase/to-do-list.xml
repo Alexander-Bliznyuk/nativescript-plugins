@@ -1,0 +1,21 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd">
+  <Page.actionBar>
+    <ActionBar title="couchbase-lite to-do list" icon="" class="action-bar">
+    </ActionBar>
+  </Page.actionBar>
+  <StackLayout>
+    <label text="{{ listName }}" class="h1 text-center text-capitalize"/>
+    <Button text="+" tap="{{ add }}" class="btn btn-primary"/>
+    <Label text="Add the first item" class="m-y-5 text-center" fontSize="18" hidden="{{ list.length, list.length > 0 }}"/>
+
+    <ListView height="100%" items="{{ list }}" class="list-group">
+      <ListView.itemTemplate>
+        <FlexboxLayout flexDirection="row" class="list-group-item" alignItems="center">
+          <Label text="{{ title }}" class="m-l-5" fontSize="18" width="80%"/>
+          <Button text="X" tap="{{ $parents['ListView'].remove, $parents['ListView'].remove }}" id="{{ id }}"
+                  class="bg-danger"/>
+        </FlexboxLayout>
+      </ListView.itemTemplate>
+    </ListView>
+  </StackLayout>
+</Page>
