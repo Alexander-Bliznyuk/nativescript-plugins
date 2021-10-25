@@ -45,7 +45,7 @@ declare module com {
         public removeChangeListener(param0: com.couchbase.lite.ListenerToken): void;
         public getName(): string;
         public getCount(): number;
-        public getDocument(param0: string): com.couchbase.lite.Document;
+        public getDocument(param0: string): com.couchbase.lite.MutableDocument;
         public getPath(): string;
         public addChangeListener(param0: com.couchbase.lite.DatabaseChangeListener): com.couchbase.lite.ListenerToken;
         public toString(): string;
@@ -851,6 +851,8 @@ declare module com {
         public constructor(param0: number);
         public static copy(param0: java.io.File, param1: string, param2: com.couchbase.lite.DatabaseConfiguration): void;
         public constructor(param0: string);
+
+        public static originals: {getDocument(param0: string): com.couchbase.lite.Document};
       }
     }
   }
