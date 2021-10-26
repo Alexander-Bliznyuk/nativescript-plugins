@@ -12,14 +12,12 @@ export default function fillAndTrack(list: ObservableArray<ListItem>, listName: 
       doc = new sdk.MutableDocument(docName);
     }
 
-    if (!doc.contains(listName)) {
-      doc.setArray(listName, new sdk.MutableArray());
+    if (!doc[listName]) {
+      doc[listName] = new sdk.MutableArray();
     }
 
-    const dbList = doc.getArray(listName);
-
-    for (let i = 0; i < dbList.count(); i++) {
-      const dbListItem = dbList.getDictionary(i);
+    for (let i = 0; i < doc[listName].count(); i++) {
+      const dbListItem = doc[listName].getDictionary(i);
       list.push(new ListItem(dbListItem.getString('title'), dbListItem.getInt('id')));
     }
     autoIncr = list.length > 0 ? list.getItem(list.length - 1).id + 1 : 0;
@@ -33,10 +31,10 @@ export default function fillAndTrack(list: ObservableArray<ListItem>, listName: 
           list.getItem(index).id = autoIncr++;
           dbListItem.setInt('id', list.getItem(index).id);
           dbListItem.setString('title', list.getItem(index).title);
-          dbList.addDictionary(dbListItem);
+          doc[listName].addDictionary(dbListItem);
           break;
         case ChangeType.Splice:
-          dbList.remove(index);
+          doc[listName].remove(index);
           break;
       }
 

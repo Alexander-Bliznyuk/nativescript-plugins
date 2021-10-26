@@ -1,14 +1,7 @@
 import {Utils} from "@nativescript/core";
-import MutableDocument = com.couchbase.lite.MutableDocument;
-
 export const sdk = com.couchbase.lite, couchbase = com.parempi.couchbase;
 
-if (!sdk.Database.originals) {
-  sdk.Database.originals = {getDocument: sdk.Database.prototype.getDocument};
-  sdk.Database.prototype.getDocument = function (...args): MutableDocument {
-    return sdk.Database.originals.getDocument.apply(this, args)?.toMutable();
-  };
-}
+import('./common');
 
 export async function open(db: string | com.parempi.couchbase.PrebuiltDb): Promise<com.couchbase.lite.Database> {
   return new Promise((resolve, reject) => {

@@ -852,7 +852,7 @@ declare module com {
         public static copy(param0: java.io.File, param1: string, param2: com.couchbase.lite.DatabaseConfiguration): void;
         public constructor(param0: string);
 
-        public static originals: {getDocument(param0: string): com.couchbase.lite.Document};
+        public static originals: Partial<Database>;
       }
     }
   }
