@@ -7,10 +7,7 @@ export default function fillAndTrack(list: ObservableArray<ListItem>, listName: 
   return function (db: Database) {
     let autoIncr = 0;
 
-    let doc = db.getDocument(docName);
-    if (!doc) {
-      doc = new sdk.MutableDocument(docName);
-    }
+    const doc = db.getDocument(docName);
 
     if (!doc[listName]) {
       doc[listName] = new sdk.MutableArray();

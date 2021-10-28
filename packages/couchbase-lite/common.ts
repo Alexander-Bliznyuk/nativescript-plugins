@@ -16,8 +16,7 @@ if (!sdk.Database.originals) {
     return getJsObjectMock(doc);
   };
 
-  sdk.Database.prototype.save = function (...args) {
-    args[0] = getCompliantInstance(args[0]);
-    return sdk.Database.originals.save.apply(this, args);
+  sdk.Database.prototype.save = function (doc, ...args) {
+    return sdk.Database.originals.save.call(this, getCompliantInstance(doc), ...args);
   };
 }
