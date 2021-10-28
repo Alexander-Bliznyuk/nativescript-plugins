@@ -1,4 +1,4 @@
-import documentProxyHandler from "./documentProxyHandler";
+import {getJsObjectMock, getCompliantInstance} from "./jsObjectOperationsMock";
 import {sdk} from ".";
 import MutableDocument = com.couchbase.lite.MutableDocument;
 
@@ -13,11 +13,11 @@ if (!sdk.Database.originals) {
       return null;
     }
 
-    return new Proxy(doc, documentProxyHandler);
+    return getJsObjectMock(doc);
   };
 
   sdk.Database.prototype.save = function (...args) {
-    args[0] = args[0]._native;
+    args[0] = getCompliantInstance(args[0]);
     return sdk.Database.originals.save.apply(this, args);
   };
 }

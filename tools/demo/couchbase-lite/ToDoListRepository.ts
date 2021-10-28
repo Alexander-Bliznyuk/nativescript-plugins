@@ -16,11 +16,11 @@ export default function fillAndTrack(list: ObservableArray<ListItem>, listName: 
       doc[listName] = new sdk.MutableArray();
     }
 
-    for (let i = 0; i < doc[listName].count(); i++) {
-      const dbListItem = doc[listName].getDictionary(i);
-      list.push(new ListItem(dbListItem.getString('title'), dbListItem.getInt('id')));
-    }
-    autoIncr = list.length > 0 ? list.getItem(list.length - 1).id + 1 : 0;
+    list.push(...doc[listName]);
+
+    autoIncr = list.length > 0
+      ? list.getItem(list.length - 1).id + 1
+      : 0;
 
     list.on('change', save);
 
@@ -31,7 +31,7 @@ export default function fillAndTrack(list: ObservableArray<ListItem>, listName: 
           list.getItem(index).id = autoIncr++;
           dbListItem.setInt('id', list.getItem(index).id);
           dbListItem.setString('title', list.getItem(index).title);
-          doc[listName].addDictionary(dbListItem);
+          doc[listName].push(dbListItem);
           break;
         case ChangeType.Splice:
           doc[listName].remove(index);
