@@ -1,7 +1,6 @@
 import MutableDictionaryInterface = com.couchbase.lite.MutableDictionaryInterface;
 import MutableArrayInterface = com.couchbase.lite.MutableArrayInterface;
-
-const NATIVE_TARGET_KEY = '_native';
+import {getCompliantInstance, NATIVE_TARGET_KEY} from "./toNativeCblConverter";
 
 const arrTraps = {
   get(target: MutableArrayInterface, prop, receiver) {
@@ -21,10 +20,11 @@ const arrTraps = {
       return true;
     }
 
+    const {type, compliantInstance} = getCompliantInstance(value);
     if (parseInt(prop) === target.count()) {
-      target.addValue(getCompliantInstance(value));
+      target['add' + type](compliantInstance);
     } else {
-      target.setValue(parseInt(prop), getCompliantInstance(value));
+      target['set' + type](parseInt(prop), compliantInstance);
       delete target[prop]; // invalidate cache
     }
     return true;
@@ -60,7 +60,8 @@ const arrTraps = {
 const dictTraps = {
   get: genericGetTrap,
   set(target: MutableDictionaryInterface, prop, value) {
-    target.setValue(prop, getCompliantInstance(value));
+    const {type, compliantInstance} = getCompliantInstance(value);
+    target['set' + type](prop, compliantInstance);
     delete target[prop]; // invalidate cache
     return true;
   },
@@ -133,14 +134,4 @@ function getCblValue(cblNativeObj, key) {
     key = parseInt(key);
   }
   return cblNativeObj.getValue(key);
-}
-
-function isMock(obj) {
-  return obj !== null
-    && typeof obj === 'object'
-    && obj[NATIVE_TARGET_KEY] !== undefined;
-}
-
-export function getCompliantInstance(obj) {
-  return isMock(obj) ? obj[NATIVE_TARGET_KEY] : obj;
 }

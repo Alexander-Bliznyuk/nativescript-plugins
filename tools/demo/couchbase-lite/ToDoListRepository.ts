@@ -1,6 +1,5 @@
 import {ChangedData, ChangeType, ObservableArray} from "@nativescript/core";
 import {ListItem} from "./ToDoList";
-import {sdk} from "@parempi/couchbase-lite";
 import Database = com.couchbase.lite.Database;
 
 export default function fillAndTrack(list: ObservableArray<ListItem>, listName: string, docName: string ) {
@@ -8,9 +7,8 @@ export default function fillAndTrack(list: ObservableArray<ListItem>, listName: 
     let autoIncr = 0;
 
     const doc = db.getDocument(docName);
-
     if (!doc[listName]) {
-      doc[listName] = new sdk.MutableArray();
+      doc[listName] = [];
     }
 
     list.push(...doc[listName]);
@@ -24,11 +22,11 @@ export default function fillAndTrack(list: ObservableArray<ListItem>, listName: 
     function save({action, index}: ChangedData<ListItem>) {
       switch (action) {
         case ChangeType.Add:
-          const dbListItem = new sdk.MutableDictionary();
           list.getItem(index).id = autoIncr++;
-          dbListItem.setInt('id', list.getItem(index).id);
-          dbListItem.setString('title', list.getItem(index).title);
-          doc[listName].push(dbListItem);
+          doc[listName].push({
+            id: list.getItem(index).id,
+            title: list.getItem(index).title
+          });
           break;
         case ChangeType.Splice:
           doc[listName].remove(index);
