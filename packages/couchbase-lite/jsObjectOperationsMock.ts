@@ -1,6 +1,7 @@
 import MutableDictionaryInterface = com.couchbase.lite.MutableDictionaryInterface;
 import MutableArrayInterface = com.couchbase.lite.MutableArrayInterface;
 import {getCompliantInstance, NATIVE_TARGET_KEY} from "./toNativeCblConverter";
+import {isAndroid} from "@nativescript/core";
 
 const arrTraps = {
   get(target: MutableArrayInterface, prop, receiver) {
@@ -133,5 +134,17 @@ function getCblValue(cblNativeObj, key) {
   if (cblNativeObj instanceof MutableArrayInterface) {
     key = parseInt(key);
   }
-  return cblNativeObj.getValue(key);
+  const value = cblNativeObj.getValue(key);
+
+  if (isAndroid) {
+    if (value instanceof java.lang.Number) {
+      return value.doubleValue();
+    } else if (value instanceof java.lang.Boolean) {
+      return value.booleanValue();
+    }
+  } else {
+    throw new Error('implement');
+  }
+
+  return value;
 }
