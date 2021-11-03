@@ -1,10 +1,10 @@
 import {isAndroid, isIOS} from "@nativescript/core";
 import MutableArray = com.couchbase.lite.MutableArray;
 import CblArray = com.couchbase.lite.Array;
-import Dictionary = com.couchbase.lite.Dictionary;
 import MutableDictionary = com.couchbase.lite.MutableDictionary;
 import MutableArrayInterface = com.couchbase.lite.MutableArrayInterface;
 import MutableDictionaryInterface = com.couchbase.lite.MutableDictionaryInterface;
+import MutableDocument = com.couchbase.lite.MutableDocument;
 
 export const NATIVE_TARGET_KEY = '_native';
 
@@ -56,8 +56,8 @@ function arrayToCblArray(arr): CblArray {
   return cblArr;
 }
 
-function objToCblDict(obj): Dictionary {
-  const cblObj = new MutableDictionary();
+export function objToCblDict(obj, cblObj?: MutableDictionary | MutableDocument): MutableDictionaryInterface {
+  cblObj ||= new MutableDictionary();
   for (const key in obj) {
     if (!obj.hasOwnProperty(key)) {
       continue;

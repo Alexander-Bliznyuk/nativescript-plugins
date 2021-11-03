@@ -3,22 +3,25 @@ const { resolve } = require('path');
 
 module.exports = (env) => {
 
-  webpack.init(env);
-  webpack.useConfig('typescript');
+    webpack.init(env);
+    webpack.useConfig('typescript');
 
-  webpack.chainWebpack((config) => {
-    // shared demo code
-    config.resolve.alias.set('@demo/shared', resolve(__dirname, '..', '..', 'tools', 'demo'));
-  });
+    webpack.chainWebpack((config) => {
+        // shared demo code
+        config.resolve.alias.set('@demo/shared', resolve(__dirname, '..', '..', 'tools', 'demo'));
+    });
 
-  webpack.Utils.addCopyRule("**/*.zip");
+    webpack.Utils.addCopyRule("**/*.zip");
+    webpack.Utils.addCopyRule("**/*.sqlite3");
+    webpack.Utils.addCopyRule("**/*.sqlite3-shm");
+    webpack.Utils.addCopyRule("**/*.sqlite3-wal");
 
-  // Example if you need to share images across demo apps:
-  // webpack.Utils.addCopyRule({
-  //   from: '../../../tools/images',
-  // 	to: 'images',
-  //   context: webpack.Utils.project.getProjectFilePath('node_modules')
-  // });
+    // Example if you need to share images across demo apps:
+    // webpack.Utils.addCopyRule({
+    //   from: '../../../tools/images',
+    // 	to: 'images',
+    //   context: webpack.Utils.project.getProjectFilePath('node_modules')
+    // });
 
-  return webpack.resolveConfig();
+    return webpack.resolveConfig();
 };

@@ -852,6 +852,8 @@ declare module com {
         public static copy(param0: java.io.File, param1: string, param2: com.couchbase.lite.DatabaseConfiguration): void;
         public constructor(param0: string);
 
+        public createDocument(document: { [key: string]: any, id?: string }, concurrencyControl: ConcurrencyControl): MutableDocument | false;
+
         public static originals: Partial<Database>;
       }
     }
