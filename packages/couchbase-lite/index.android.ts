@@ -1,4 +1,8 @@
 import {Utils} from "@nativescript/core";
+import {getJsObjectMock} from "./jsObjectOperationsMock";
+import MutableDictionaryInterface = com.couchbase.lite.MutableDictionaryInterface;
+import MutableDocument = com.couchbase.lite.MutableDocument;
+
 export const sdk = com.couchbase.lite, couchbase = com.parempi.couchbase;
 
 import('./common');
@@ -28,4 +32,44 @@ export function openSync(db: string | com.parempi.couchbase.PrebuiltDb): com.cou
   }
 }
 
+
+export function fetchDocuments(query, db): Promise<Iterable<MutableDocument>> {
+  return new Promise<java.util.List<MutableDocument>>((resolve, reject) => {
+    couchbase.QueryService.fetchDocuments(query, db, new couchbase.Promise({resolve, reject}));
+  }).then(toJsIterable);
+}
+
+export function fetch(query): Promise<Iterable<MutableDictionaryInterface>> {
+  return new Promise<java.util.List<MutableDictionaryInterface>>((resolve, reject) => {
+    couchbase.QueryService.fetch(query, new couchbase.Promise({resolve, reject}));
+  }).then(toJsIterable);
+}
+
+export function fetchAll(query: com.couchbase.lite.Query): Promise<Iterable<MutableDictionaryInterface>> {
+  return new Promise<java.util.List<MutableDictionaryInterface>>((resolve, reject) => {
+    couchbase.QueryService.fetchAll(query, new couchbase.Promise({resolve, reject}));
+  }).then(toJsIterable);
+}
+
+export function fetchColumn<T>(query): Promise<Iterable<T>> {
+  return new Promise<java.util.List<T>>((resolve, reject) => {
+    couchbase.QueryService.fetchColumn(query, new couchbase.Promise({resolve, reject}));
+  }).then(toJsIterable);
+}
+
+
+export function fetchValue<T>(query): Promise<T> {
+  return new Promise((resolve, reject) => {
+    couchbase.QueryService.fetchValue(query, new couchbase.Promise({resolve, reject}));
+  }).then(getJsObjectMock);
+}
+
+function* toJsIterable<T>(obj: java.util.List<T>): Iterable<T> {
+  for (let i = 0; i < obj.size(); i++) {
+    if (obj[i] === undefined) {
+      obj[i] = getJsObjectMock(obj.get(i)); // cache
+    }
+    yield obj[i];
+  }
+}
 

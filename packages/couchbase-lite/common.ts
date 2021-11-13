@@ -1,7 +1,12 @@
 import {getJsObjectMock,} from "./jsObjectOperationsMock";
 import {sdk} from ".";
 import {getCompliantInstance, objToCblDict} from "./toNativeCblConverter";
+import {QueryResultShaper} from "./queryResultShaper";
 import MutableDocument = com.couchbase.lite.MutableDocument;
+import Database = com.couchbase.lite.Database;
+import DataSource = com.couchbase.lite.DataSource;
+import AbstractQuery = com.couchbase.lite.AbstractQuery;
+import From = com.couchbase.lite.From;
 
 if (!sdk.Database.originals) {
   sdk.Database.originals = {
@@ -29,5 +34,26 @@ if (!sdk.Database.originals) {
 
   sdk.Database.prototype.save = function (doc, ...args) {
     return sdk.Database.originals.save.call(this, getCompliantInstance(doc).compliantInstance, ...args);
+  };
+
+  sdk.Database.prototype.getDatasource = function (): DataSource {
+    if (this.dataSource === undefined) {
+      this.dataSource = sdk.DataSource.database(this);
+      if (this.alias !== undefined) {
+        this.dataSource = this.dataSource.as(this.alias);
+      }
+    }
+    return this.dataSource;
+  };
+
+
+  sdk.Database.prototype.setAlias = function (alias: string): Database {
+    this.alias = alias;
+    this.dataSource = sdk.DataSource.database(this).as(this.alias);
+    return this;
+  };
+
+  sdk.Database.prototype.fetch = function (queryBuilder?: (query: From) => AbstractQuery): QueryResultShaper {
+    return new QueryResultShaper(this, queryBuilder);
   };
 }
