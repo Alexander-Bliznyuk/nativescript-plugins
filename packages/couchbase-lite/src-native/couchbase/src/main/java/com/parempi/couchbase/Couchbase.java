@@ -8,6 +8,9 @@ import com.couchbase.lite.DatabaseConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.Executors;
+
+import static com.parempi.couchbase.ThreadedExecutor.promisifyThread;
 
 
 public class Couchbase {
@@ -16,17 +19,13 @@ public class Couchbase {
   public static void open(Context context, PrebuiltDb prebuiltDb,
                           Promise promise) {
     DatabaseConfiguration config = configure(context);
-    new Thread(() -> {
-      try {
-        if (!Database.exists(prebuiltDb.getName(),
-          new File(config.getDirectory()))) {
-          prebuiltDb.install(config);
-        }
-        promise.resolve(new Database(prebuiltDb.getName(), config));
-      } catch (CouchbaseLiteException | NSCouchbaseLiteException | IOException e) {
-        promise.reject(e.getMessage());
+    promisifyThread(promise, () -> {
+      if (!Database.exists(prebuiltDb.getName(),
+        new File(config.getDirectory()))) {
+        prebuiltDb.install(config);
       }
-    }).start();
+      return new Database(prebuiltDb.getName(), config);
+    });
   }
 
   public static void open(Context context, String dbName, Promise promise) {
@@ -51,6 +50,7 @@ public class Couchbase {
   public static void init(Context context) {
     if (!isInitialized) {
       CouchbaseLite.init(context);
+      ThreadedExecutor.setExecutorService(Executors.newFixedThreadPool(2));
       isInitialized = true;
     }
   }
