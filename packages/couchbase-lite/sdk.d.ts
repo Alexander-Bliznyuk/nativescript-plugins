@@ -21,13 +21,13 @@ declare module com {
       export abstract class AbstractDatabase {
         public static class: java.lang.Class<com.couchbase.lite.AbstractDatabase>;
         public static log: com.couchbase.lite.Log;
-        public save(param0: com.couchbase.lite.MutableDocument, param1: com.couchbase.lite.ConflictHandler): boolean;
+        public save(param0: com.couchbase.lite.MutableDocument | POJODoc, param1: com.couchbase.lite.ConflictHandler): boolean;
         /** @deprecated */
         public compact(): void;
         public constructor(param0: string, param1: com.couchbase.lite.DatabaseConfiguration);
         public addDocumentChangeListener(param0: string, param1: com.couchbase.lite.DocumentChangeListener): com.couchbase.lite.ListenerToken;
         public finalize(): void;
-        public save(param0: com.couchbase.lite.MutableDocument, param1: com.couchbase.lite.ConcurrencyControl): boolean;
+        public save(param0: com.couchbase.lite.MutableDocument | POJODoc, param1: com.couchbase.lite.ConcurrencyControl): boolean;
         public static exists(param0: string, param1: java.io.File): boolean;
         public performMaintenance(param0: com.couchbase.lite.MaintenanceType): boolean;
         public getC4DatabaseLocked(): com.couchbase.lite.internal.core.C4Database;
@@ -37,7 +37,7 @@ declare module com {
         public inBatch(param0: java.lang.Runnable): void;
         public delete(): void;
         public static copy(param0: java.io.File, param1: string, param2: com.couchbase.lite.DatabaseConfiguration, param3: number, param4: androidNative.Array<number>): void;
-        public save(param0: com.couchbase.lite.MutableDocument): void;
+        public save(param0: com.couchbase.lite.MutableDocument | POJODoc): void;
         public delete(param0: com.couchbase.lite.Document): void;
         public purge(param0: string): void;
         public close(): void;
@@ -854,7 +854,7 @@ declare module com {
 
         public alias: string;
 
-        public createDocument(document: { [key: string]: any, id?: string }, concurrencyControl: ConcurrencyControl): MutableDocument | false;
+        public createDocument(document: POJODoc, concurrencyControl: ConcurrencyControl): MutableDocument | false;
 
         public getDatasource(): DataSource;
 
@@ -1061,6 +1061,8 @@ declare module com {
         public getInt(param0: string): number;
         public getArray(param0: string): com.couchbase.lite.Array;
       }
+
+      export type POJODoc = { [key: string]: any, id?: string };
     }
   }
 }

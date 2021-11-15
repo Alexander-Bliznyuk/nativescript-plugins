@@ -5,6 +5,8 @@ import MutableDictionary = com.couchbase.lite.MutableDictionary;
 import MutableArrayInterface = com.couchbase.lite.MutableArrayInterface;
 import MutableDictionaryInterface = com.couchbase.lite.MutableDictionaryInterface;
 import MutableDocument = com.couchbase.lite.MutableDocument;
+import {sdk} from ".";
+import POJODoc = com.couchbase.lite.POJODoc;
 
 export const NATIVE_TARGET_KEY = '_native';
 
@@ -56,8 +58,8 @@ function arrayToCblArray(arr): CblArray {
   return cblArr;
 }
 
-export function objToCblDict(obj, cblObj?: MutableDictionary | MutableDocument): MutableDictionaryInterface {
-  cblObj ||= new MutableDictionary();
+export function objToCblDict<T extends MutableDictionary | MutableDocument>(obj, cblObj?: T): T {
+  cblObj ||= <T>new MutableDictionary();
   for (const key in obj) {
     if (!obj.hasOwnProperty(key)) {
       continue;
@@ -66,6 +68,22 @@ export function objToCblDict(obj, cblObj?: MutableDictionary | MutableDocument):
     cblObj['set' + type](key, compliantInstance);
   }
   return cblObj;
+}
+
+export function objToCblDoc(document: POJODoc): MutableDocument {
+  const cblDoc = objToCblDict(document, new sdk.MutableDocument(document.id));
+  if (typeof document.id === 'string') {
+    cblDoc.remove('id');
+  }
+  return cblDoc;
+}
+
+export function getCompliantDocument(document: POJODoc | MutableDocument): MutableDocument {
+  if (Object.getPrototypeOf(document) === Object.prototype) {
+    return objToCblDoc(document);
+  } else {
+    return getCompliantInstance(document).compliantInstance;
+  }
 }
 
 function toNativeDate(date: Date) {

@@ -1,12 +1,13 @@
 import {getJsObjectMock,} from "./jsObjectOperationsMock";
 import {sdk} from ".";
-import {getCompliantInstance, objToCblDict} from "./toNativeCblConverter";
+import {getCompliantDocument, objToCblDoc} from "./toNativeCblConverter";
 import {QueryResultShaper} from "./queryResultShaper";
 import MutableDocument = com.couchbase.lite.MutableDocument;
 import Database = com.couchbase.lite.Database;
 import DataSource = com.couchbase.lite.DataSource;
 import AbstractQuery = com.couchbase.lite.AbstractQuery;
 import From = com.couchbase.lite.From;
+import POJODoc = com.couchbase.lite.POJODoc;
 
 if (!sdk.Database.originals) {
   sdk.Database.originals = {
@@ -20,11 +21,8 @@ if (!sdk.Database.originals) {
     return getJsObjectMock(doc);
   };
 
-  sdk.Database.prototype.createDocument = function (document: { [key: string]: any, id?: string }, ...args): MutableDocument | false {
-    const compliantInstance = objToCblDict(document, new sdk.MutableDocument(document.id));
-    if (typeof document.id === 'string') {
-      compliantInstance.remove('id');
-    }
+  sdk.Database.prototype.createDocument = function (document: POJODoc, ...args): MutableDocument | false {
+    const compliantInstance = objToCblDoc(document);
     const result = sdk.Database.originals.save.call(this, compliantInstance, ...args);
     if (result === undefined || result === true) {
       return getJsObjectMock(compliantInstance);
@@ -32,8 +30,8 @@ if (!sdk.Database.originals) {
     return false;
   };
 
-  sdk.Database.prototype.save = function (doc, ...args) {
-    return sdk.Database.originals.save.call(this, getCompliantInstance(doc).compliantInstance, ...args);
+  sdk.Database.prototype.save = function (doc: POJODoc | MutableDocument, ...args) {
+    return sdk.Database.originals.save.call(this, getCompliantDocument(doc), ...args);
   };
 
   sdk.Database.prototype.getDatasource = function (): DataSource {
