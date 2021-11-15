@@ -862,7 +862,7 @@ declare module com {
 
         public fetch(queryBuilder?: (query: From) => AbstractQuery): QueryResultShaper;
 
-        public alias: string;
+        public saveInBatch(docs: POJODoc[] | MutableDocument[]): Promise<void>;
 
         public static originals: Partial<Database>;
       }

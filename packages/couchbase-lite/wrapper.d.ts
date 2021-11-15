@@ -111,6 +111,8 @@ declare module com {
 
         public static fetchDocuments(param0: com.couchbase.lite.Query, param1: com.couchbase.lite.Database, param2: com.parempi.couchbase.Promise): void;
 
+        public static saveInBatch(param0: com.couchbase.lite.Database, param1: com.couchbase.lite.MutableDocument[], param2: com.parempi.couchbase.Promise): void;
+
         public constructor();
       }
     }

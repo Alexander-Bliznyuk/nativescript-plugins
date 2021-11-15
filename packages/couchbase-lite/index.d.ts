@@ -16,3 +16,5 @@ export function fetchAll(query: com.couchbase.lite.Query): Promise<Iterable<Muta
 export function fetchColumn<T>(query): Promise<Iterable<T>>;
 
 export function fetchValue<T>(query): Promise<T>;
+
+export function saveInBatch(db: Database, docs: MutableDocument[]): Promise<void>;

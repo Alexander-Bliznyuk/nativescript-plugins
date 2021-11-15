@@ -1,5 +1,5 @@
 import {getJsObjectMock,} from "./jsObjectOperationsMock";
-import {sdk} from ".";
+import {sdk, saveInBatch} from ".";
 import {getCompliantDocument, objToCblDoc} from "./toNativeCblConverter";
 import {QueryResultShaper} from "./queryResultShaper";
 import MutableDocument = com.couchbase.lite.MutableDocument;
@@ -32,6 +32,15 @@ if (!sdk.Database.originals) {
 
   sdk.Database.prototype.save = function (doc: POJODoc | MutableDocument, ...args) {
     return sdk.Database.originals.save.call(this, getCompliantDocument(doc), ...args);
+  };
+
+  sdk.Database.prototype.saveInBatch = function (docs: POJODoc[] | MutableDocument[]): Promise<void> {
+    const nativeDocs = [];
+    for (const doc of docs) {
+      nativeDocs.push(getCompliantDocument(doc));
+    }
+
+    return saveInBatch(this, nativeDocs);
   };
 
   sdk.Database.prototype.getDatasource = function (): DataSource {

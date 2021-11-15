@@ -2,6 +2,7 @@ import {Utils} from "@nativescript/core";
 import {getJsObjectMock} from "./jsObjectOperationsMock";
 import MutableDictionaryInterface = com.couchbase.lite.MutableDictionaryInterface;
 import MutableDocument = com.couchbase.lite.MutableDocument;
+import Database = com.couchbase.lite.Database;
 
 export const sdk = com.couchbase.lite, couchbase = com.parempi.couchbase;
 
@@ -62,6 +63,12 @@ export function fetchValue<T>(query): Promise<T> {
   return new Promise((resolve, reject) => {
     couchbase.QueryService.fetchValue(query, new couchbase.Promise({resolve, reject}));
   }).then(getJsObjectMock);
+}
+
+export async function saveInBatch(db: Database, docs: MutableDocument[]): Promise<void> {
+  return new Promise((resolve, reject) => {
+    couchbase.QueryService.saveInBatch(db, docs, new couchbase.Promise({resolve, reject}));
+  });
 }
 
 function* toJsIterable<T>(obj: java.util.List<T>): Iterable<T> {

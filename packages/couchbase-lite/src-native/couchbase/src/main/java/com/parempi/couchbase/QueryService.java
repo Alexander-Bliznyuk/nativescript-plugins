@@ -93,4 +93,20 @@ public class QueryService {
   public static void fetchValue(Query query, Promise promise) {
     promisifyThread(promise, () -> query.execute().next().getValue(0));
   }
+
+  public static void saveInBatch(Database db, MutableDocument[] documents,
+                                 Promise promise) {
+    promisifyThread(promise, () -> {
+      db.inBatch(() -> {
+        try {
+          for (MutableDocument document : documents) {
+            db.save(document);
+          }
+        } catch (CouchbaseLiteException e) {
+          throw new RuntimeException(e.getMessage());
+        }
+      });
+      return null;
+    });
+  }
 }
