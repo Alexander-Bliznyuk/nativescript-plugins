@@ -7,7 +7,7 @@ import {
   fetchColumnAsJson,
   fetchDocuments,
   fetchValue, fetchValueAsJson,
-  sdk
+  cbl
 } from ".";
 import AbstractQuery = com.couchbase.lite.AbstractQuery;
 import From = com.couchbase.lite.From;
@@ -38,7 +38,7 @@ abstract class AbstractQueryShaper {
   }
 
   select(...args): From {
-    const selector = this.isDistinct ? sdk.QueryBuilder.selectDistinct : sdk.QueryBuilder.select;
+    const selector = this.isDistinct ? cbl.QueryBuilder.selectDistinct : cbl.QueryBuilder.select;
     this.isDistinct = false;
     return selector(args).from(this.db.getDatasource());
   }
@@ -57,7 +57,7 @@ abstract class AbstractQueryShaper {
 
 export class QueryShaper extends AbstractQueryShaper {
   documents(): Promise<Iterable<MutableDocument>> {
-    const query = this.buildQuery(this.select(sdk.SelectResult.expression(sdk.Meta.id)));
+    const query = this.buildQuery(this.select(cbl.SelectResult.expression(cbl.Meta.id)));
     return fetchDocuments(query, this.db);
   }
 
@@ -67,7 +67,7 @@ export class QueryShaper extends AbstractQueryShaper {
 
   rows(...props: SelectResult[]): Promise<Iterable<MutableDictionaryInterface>> {
     if (props.length === 0) {
-      return this.fetch(fetchAll, sdk.SelectResult.all(), sdk.SelectResult.expression(sdk.Meta.id));
+      return this.fetch(fetchAll, cbl.SelectResult.all(), cbl.SelectResult.expression(cbl.Meta.id));
     }
     return this.fetch(fetch, ...props);
   }
@@ -92,7 +92,7 @@ class JsonShaper extends AbstractQueryShaper {
 
   rows(...props: SelectResult[]): Promise<string> {
     if (props.length === 0) {
-      return this.fetch(fetchAllAsJson, sdk.SelectResult.all(), sdk.SelectResult.expression(sdk.Meta.id));
+      return this.fetch(fetchAllAsJson, cbl.SelectResult.all(), cbl.SelectResult.expression(cbl.Meta.id));
     }
     return this.fetch(fetchAsJson, ...props);
   }

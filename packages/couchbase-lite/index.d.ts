@@ -1,7 +1,7 @@
 /// <reference path="./sdk.d.ts" />
-/// <reference path="./wrapper.d.ts" />
+/// <reference path="./helpers.d.ts" />
 
-export const sdk = com.couchbase.lite, couchbase = com.parempi.couchbase;
+export const cbl = com.couchbase.lite, cblHelpers = com.parempi.couchbase;
 
 export function open(db: string | com.parempi.couchbase.PrebuiltDb): Promise<com.couchbase.lite.Database>;
 

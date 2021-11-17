@@ -5,7 +5,7 @@ import MutableDictionary = com.couchbase.lite.MutableDictionary;
 import MutableArrayInterface = com.couchbase.lite.MutableArrayInterface;
 import MutableDictionaryInterface = com.couchbase.lite.MutableDictionaryInterface;
 import MutableDocument = com.couchbase.lite.MutableDocument;
-import {sdk} from ".";
+import {cbl} from ".";
 import POJODoc = com.couchbase.lite.POJODoc;
 
 export const NATIVE_TARGET_KEY = '_native';
@@ -71,7 +71,7 @@ export function objToCblDict<T extends MutableDictionary | MutableDocument>(obj,
 }
 
 export function objToCblDoc(document: POJODoc): MutableDocument {
-  const cblDoc = objToCblDict(document, new sdk.MutableDocument(document.id));
+  const cblDoc = objToCblDict(document, new cbl.MutableDocument(document.id));
   if (typeof document.id === 'string') {
     cblDoc.remove('id');
   }
