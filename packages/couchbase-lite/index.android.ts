@@ -46,10 +46,22 @@ export function fetch(query): Promise<Iterable<MutableDictionaryInterface>> {
   }).then(toJsIterable);
 }
 
+export function fetchAsJson(query): Promise<string> {
+  return new Promise((resolve, reject) => {
+    couchbase.QueryService.fetchAsJson(query, new couchbase.Promise({resolve, reject}));
+  });
+}
+
 export function fetchAll(query: com.couchbase.lite.Query): Promise<Iterable<MutableDictionaryInterface>> {
   return new Promise<java.util.List<MutableDictionaryInterface>>((resolve, reject) => {
     couchbase.QueryService.fetchAll(query, new couchbase.Promise({resolve, reject}));
   }).then(toJsIterable);
+}
+
+export function fetchAllAsJson(query: com.couchbase.lite.Query): Promise<string> {
+  return new Promise((resolve, reject) => {
+    couchbase.QueryService.fetchAllAsJson(query, new couchbase.Promise({resolve, reject}));
+  });
 }
 
 export function fetchColumn<T>(query): Promise<Iterable<T>> {
@@ -58,11 +70,22 @@ export function fetchColumn<T>(query): Promise<Iterable<T>> {
   }).then(toJsIterable);
 }
 
+export async function fetchColumnAsJson(query): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    couchbase.QueryService.fetchColumnAsJson(query, new couchbase.Promise({resolve, reject}));
+  });
+}
 
 export function fetchValue<T>(query): Promise<T> {
   return new Promise((resolve, reject) => {
     couchbase.QueryService.fetchValue(query, new couchbase.Promise({resolve, reject}));
   }).then(getJsObjectMock);
+}
+
+export function fetchValueAsJson(query): Promise<string> {
+  return new Promise((resolve, reject) => {
+    couchbase.QueryService.fetchValueAsJson(query, new couchbase.Promise({resolve, reject}));
+  });
 }
 
 export async function saveInBatch(db: Database, docs: MutableDocument[]): Promise<void> {

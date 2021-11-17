@@ -102,12 +102,16 @@ declare module com {
         public static class: java.lang.Class<com.parempi.couchbase.QueryService>;
 
         public static fetchValue(param0: com.couchbase.lite.Query, param1: com.parempi.couchbase.Promise): void;
+        public static fetchValueAsJson(param0: com.couchbase.lite.Query, param1: com.parempi.couchbase.Promise): void;
 
         public static fetch(param0: com.couchbase.lite.Query, param1: com.parempi.couchbase.Promise): void;
+        public static fetchAsJson(param0: com.couchbase.lite.Query, param1: com.parempi.couchbase.Promise): void;
 
         public static fetchColumn(param0: com.couchbase.lite.Query, param1: com.parempi.couchbase.Promise): void;
+        public static fetchColumnAsJson(param0: com.couchbase.lite.Query, param1: com.parempi.couchbase.Promise): void;
 
         public static fetchAll(param0: com.couchbase.lite.Query, param1: com.parempi.couchbase.Promise): void;
+        public static fetchAllAsJson(param0: com.couchbase.lite.Query, param1: com.parempi.couchbase.Promise): void;
 
         public static fetchDocuments(param0: com.couchbase.lite.Query, param1: com.couchbase.lite.Database, param2: com.parempi.couchbase.Promise): void;
 

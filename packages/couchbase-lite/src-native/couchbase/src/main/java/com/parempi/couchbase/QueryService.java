@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.parempi.couchbase.CblJsonSerializer.toJson;
 import static com.parempi.couchbase.ThreadedExecutor.promisifyThread;
 
 public class QueryService {
@@ -28,25 +29,31 @@ public class QueryService {
     });
   }
 
-  public static void fetch(Query query, Promise promise) {
-    promisifyThread(promise, () -> {
-      ResultSet resultsIter = query.execute();
+  private static List<MutableDictionaryInterface> fetch(Query query) throws CouchbaseLiteException {
+    ResultSet resultsIter = query.execute();
 
-      List<MutableDictionaryInterface> listOfRows = new ArrayList<>();
+    List<MutableDictionaryInterface> listOfRows = new ArrayList<>();
 
-      Result result = resultsIter.next();
-      if (result == null) {
-        return listOfRows;
-      }
-      List<String> columns = result.getKeys();
-      do {
-        listOfRows.add(
-          resultToDictionary(result, columns)
-        );
-      } while ((result = resultsIter.next()) != null);
-
+    Result result = resultsIter.next();
+    if (result == null) {
       return listOfRows;
-    });
+    }
+    List<String> columns = result.getKeys();
+    do {
+      listOfRows.add(
+        resultToDictionary(result, columns)
+      );
+    } while ((result = resultsIter.next()) != null);
+
+    return listOfRows;
+  }
+
+  public static void fetch(Query query, Promise promise) {
+    promisifyThread(promise, () -> fetch(query));
+  }
+
+  public static void fetchAsJson(Query query, Promise promise) {
+    promisifyThread(promise, () -> toJson(fetch(query)));
   }
 
   private static MutableDictionaryInterface resultToDictionary(Result result,
@@ -58,18 +65,24 @@ public class QueryService {
     return dictionary;
   }
 
-  public static void fetchAll(Query query, Promise promise) {
-    promisifyThread(promise, () -> {
-      ResultSet resultsIter = query.execute();
+  public static List<MutableDictionaryInterface> fetchAll(Query query) throws CouchbaseLiteException {
+    ResultSet resultsIter = query.execute();
 
-      List<MutableDictionaryInterface> rowsOfAllProps = new ArrayList<>();
-      for (Result result : resultsIter) {
-        rowsOfAllProps.add(
-          flattenSelectedAll(result)
-        );
-      }
-      return rowsOfAllProps;
-    });
+    List<MutableDictionaryInterface> rowsOfAllProps = new ArrayList<>();
+    for (Result result : resultsIter) {
+      rowsOfAllProps.add(
+        flattenSelectedAll(result)
+      );
+    }
+    return rowsOfAllProps;
+  }
+
+  public static void fetchAll(Query query, Promise promise) {
+    promisifyThread(promise, () -> fetchAll(query));
+  }
+
+  public static void fetchAllAsJson(Query query, Promise promise) {
+    promisifyThread(promise, () -> toJson(fetchAll(query)));
   }
 
   private static MutableDictionaryInterface flattenSelectedAll(Result result) {
@@ -79,19 +92,34 @@ public class QueryService {
       .setString("id", result.getString("id"));
   }
 
+  private static List<Object> fetchColumn(Query query) throws CouchbaseLiteException {
+    ResultSet resultsIter = query.execute();
+    List<Object> column = new ArrayList<>();
+    for (Result result : resultsIter) {
+      column.add(result.getValue(0));
+    }
+    return column;
+  }
+
   public static void fetchColumn(Query query, Promise promise) {
-    promisifyThread(promise, () -> {
-      ResultSet resultsIter = query.execute();
-      List<Object> column = new ArrayList<>();
-      for (Result result : resultsIter) {
-        column.add(result.getValue(0));
-      }
-      return column;
-    });
+    promisifyThread(promise, () -> fetchColumn(query));
+  }
+
+  public static void fetchColumnAsJson(Query query, Promise promise) {
+    promisifyThread(promise,
+      () -> toJson(fetchColumn(query)));
+  }
+
+  private static Object fetchValue(Query query) throws CouchbaseLiteException {
+    return query.execute().next().getValue(0);
   }
 
   public static void fetchValue(Query query, Promise promise) {
-    promisifyThread(promise, () -> query.execute().next().getValue(0));
+    promisifyThread(promise, () -> fetchValue(query));
+  }
+
+  public static void fetchValueAsJson(Query query, Promise promise) {
+    promisifyThread(promise, () -> toJson(fetchValue(query)));
   }
 
   public static void saveInBatch(Database db, MutableDocument[] documents,

@@ -860,7 +860,7 @@ declare module com {
 
         public setAlias(alias: string): Database;
 
-        public fetch(queryBuilder?: (query: From) => AbstractQuery): QueryResultShaper;
+        public fetch(queryBuilder?: (query: From) => AbstractQuery): QueryShaper;
 
         public saveInBatch(docs: POJODoc[] | MutableDocument[]): Promise<void>;
 
