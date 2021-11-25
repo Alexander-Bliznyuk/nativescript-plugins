@@ -6,13 +6,15 @@ declare module com {
 
         public constructor();
 
-        public static open(param0: globalAndroid.content.Context, param1: com.parempi.couchbase.PrebuiltDb, param2: com.parempi.couchbase.Promise): void;
+        public static open(param0: com.parempi.couchbase.PrebuiltDb, param1: com.parempi.couchbase.Promise): void;
 
-        public static open(param0: globalAndroid.content.Context, param1: string, param2: com.parempi.couchbase.Promise): void;
+        public static open(param0: string, param1: com.parempi.couchbase.Promise): void;
 
-        public static openSync(param0: globalAndroid.content.Context, param1: string): com.couchbase.lite.Database;
+        public static openSync(param0: string): com.couchbase.lite.Database;
 
-        public static openSync(param0: globalAndroid.content.Context, param1: com.parempi.couchbase.PrebuiltDb): com.couchbase.lite.Database;
+        public static openSync(param0: com.parempi.couchbase.PrebuiltDb): com.couchbase.lite.Database;
+
+        public static init(param0: globalAndroid.content.Context): void;
       }
     }
   }

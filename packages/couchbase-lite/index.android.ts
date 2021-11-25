@@ -3,33 +3,38 @@ import {getJsObjectMock} from "./jsObjectOperationsMock";
 import MutableDictionaryInterface = com.couchbase.lite.MutableDictionaryInterface;
 import MutableDocument = com.couchbase.lite.MutableDocument;
 import Database = com.couchbase.lite.Database;
+import {Application} from "@nativescript/core";
 
 export const cbl = com.couchbase.lite, cblHelpers = com.parempi.couchbase;
 
 import('./common');
 
+(function init(context: android.content.Context) {
+  if (context) {
+    cblHelpers.Couchbase.init(context);
+  } else {
+    Application.on(Application.launchEvent, data => init(data.object.context));
+  }
+})(Utils.ad.getApplicationContext());
+
 export async function open(db: string | com.parempi.couchbase.PrebuiltDb): Promise<com.couchbase.lite.Database> {
   return new Promise((resolve, reject) => {
     const resolver = new cblHelpers.Promise({resolve, reject});
-    const context = Utils.ad.getApplicationContext();
-
     // overloaded methods don't match union types, therefore below is a typechecking to calm down typescript
     if (typeof db === "string") {
-      cblHelpers.Couchbase.open(context, db, resolver);
+      cblHelpers.Couchbase.open(db, resolver);
     } else {
-      cblHelpers.Couchbase.open(context, db, resolver);
+      cblHelpers.Couchbase.open(db, resolver);
     }
   });
 }
 
 export function openSync(db: string | com.parempi.couchbase.PrebuiltDb): com.couchbase.lite.Database {
-  const context = Utils.ad.getApplicationContext();
-
   // overloaded methods don't match union types, therefore below is a typechecking to calm down typescript
   if (typeof db === "string") {
-    return cblHelpers.Couchbase.openSync(context, db);
+    return cblHelpers.Couchbase.openSync(db);
   } else {
-    return cblHelpers.Couchbase.openSync(context, db);
+    return cblHelpers.Couchbase.openSync(db);
   }
 }
 
@@ -102,4 +107,3 @@ function* toJsIterable<T>(obj: java.util.List<T>): Iterable<T> {
     yield obj[i];
   }
 }
-
