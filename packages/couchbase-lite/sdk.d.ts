@@ -855,6 +855,7 @@ declare module com {
         public alias: string;
 
         public createDocument(document: POJODoc, concurrencyControl: ConcurrencyControl): MutableDocument | false;
+        public createDocument(document: POJODoc): MutableDocument;
 
         public getDatasource(): DataSource;
 
@@ -862,13 +863,59 @@ declare module com {
 
         public fetch(queryBuilder?: (query: From) => AbstractQuery): QueryShaper;
 
-        public saveInBatch(docs: POJODoc[] | MutableDocument[]): Promise<void>;
+        public saveInBatch(docs: POJODoc[] | MutableDocument[] | Iterable<MutableDictionaryInterface>): Promise<void>;
 
         public static originals: Partial<Database>;
       }
     }
   }
 }
+
+
+abstract class AbstractQueryShaper {
+  constructor(db: com.couchbase.lite.Database, queryBuilder?: (query: com.couchbase.lite.From) => com.couchbase.lite.AbstractQuery);
+  distinct(): this;
+
+  select(...args): com.couchbase.lite.From;
+
+  abstract column(prop: com.couchbase.lite.SelectResult): Promise<any>;
+
+  abstract rows(...props: com.couchbase.lite.SelectResult[]): Promise<any>;
+
+  abstract value(prop: com.couchbase.lite.SelectResult): Promise<any>;
+}
+
+class QueryShaper extends AbstractQueryShaper {
+  documents(): Promise<Iterable<com.couchbase.lite.MutableDocument>>;
+
+  column<T>(prop: com.couchbase.lite.SelectResult): Promise<Iterable<T>>;
+
+  rows(...props: com.couchbase.lite.SelectResult[]): Promise<Iterable<com.couchbase.lite.MutableDictionaryInterface>>;
+
+  value<T>(prop: com.couchbase.lite.SelectResult): Promise<T>;
+
+  json(): JsonShaper;
+
+  plain(): PlainShaper;
+}
+
+
+class JsonShaper extends AbstractQueryShaper {
+  column(prop: com.couchbase.lite.SelectResult): Promise<string>;
+
+  rows(...props: com.couchbase.lite.SelectResult[]): Promise<string>;
+
+  value(prop: com.couchbase.lite.SelectResult): Promise<string>;
+}
+
+class PlainShaper extends AbstractQueryShaper {
+  async column<T>(prop: com.couchbase.lite.SelectResult): Promise<T[]>;
+
+  async rows(...props: com.couchbase.lite.SelectResult[]): Promise<com.couchbase.lite.POJODoc[]>;
+
+  async value<T>(prop: com.couchbase.lite.SelectResult): Promise<T>;
+}
+
 
 declare module com {
   export module couchbase {
@@ -963,6 +1010,8 @@ declare module com {
         public toMap(): java.util.Map<string,any>;
         public getInt(param0: string): number;
         public getArray(param0: string): com.couchbase.lite.Array;
+
+        [key: string]: any;
       }
     }
   }
@@ -1011,6 +1060,8 @@ declare module com {
         public getBlob(param0: string): com.couchbase.lite.Blob;
         public toMap(): java.util.Map<string,any>;
         public getInt(param0: string): number;
+
+        [key: string]: any;
       }
     }
   }
@@ -1060,6 +1111,8 @@ declare module com {
         public toMap(): java.util.Map<string,any>;
         public getInt(param0: string): number;
         public getArray(param0: string): com.couchbase.lite.Array;
+
+        [key: string]: any;
       }
 
       export type POJODoc = { [key: string]: any, id?: string };

@@ -21,7 +21,7 @@ if (!cbl.Database.originals) {
     return getJsObjectMock(doc);
   };
 
-  cbl.Database.prototype.createDocument = function (document: POJODoc, ...args): MutableDocument | false {
+  cbl.Database.prototype.createDocument = function (document: POJODoc, ...args) {
     const compliantInstance = objToCblDoc(document);
     const result = cbl.Database.originals.save.call(this, compliantInstance, ...args);
     if (result === undefined || result === true) {
@@ -34,7 +34,7 @@ if (!cbl.Database.originals) {
     return cbl.Database.originals.save.call(this, getCompliantDocument(doc), ...args);
   };
 
-  cbl.Database.prototype.saveInBatch = function (docs: POJODoc[] | MutableDocument[]): Promise<void> {
+  cbl.Database.prototype.saveInBatch = function (docs: POJODoc[] | MutableDocument[] | Iterable<MutableDocument>): Promise<void> {
     const nativeDocs = [];
     for (const doc of docs) {
       nativeDocs.push(getCompliantDocument(doc));
