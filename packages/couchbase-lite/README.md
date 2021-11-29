@@ -273,7 +273,7 @@ It's very impressive how much we can accomplish  — thanks to NativeScript — 
 However, JavaScript is more dynamic and concise in comparison to some lower level languages Couchbase Lite is written in.
 A downside of JS is that it lacks multithreading.
 
-@parempi/couchbase-lite provides you takes advantage of both worlds.
+@parempi/couchbase-lite takes advantage of both worlds.
 
 Next sections will walk you through the convenient extensions over native Couchbase Lite that I've developed so far.
 

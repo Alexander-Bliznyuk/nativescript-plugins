@@ -1,37 +1,55 @@
 {
-    "name": "@parempi/couchbase-lite",
-    "version": "1.0.0",
-    "description": "NativeScript Couchbase Lite Plugin",
-    "main": "index",
-    "typings": "index.d.ts",
-    "nativescript": {
-        "platforms": {
-            "ios": "6.0.0",
-            "android": "6.0.0"
-        }
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/Alexander-Bliznyuk/nativescript-plugins.git"
-    },
-    "keywords": [
-        "NativeScript",
-        "JavaScript",
-        "TypeScript",
-        "Android",
-        "couchbase",
-        "couchbase mobile",
-        "couchbase lite",
-        "nosql",
-        "database",
-        "async"
-    ],
-    "author": "Alexander Bliznyuk",
-    "bugs": {
-        "url": "https://github.com/Alexander-Bliznyuk/nativescript-plugins/issues"
-    },
-    "license": "Apache-2.0",
-    "homepage": "https://github.com/Alexander-Bliznyuk/nativescript-plugins",
-    "readmeFilename": "README.md",
-    "bootstrapper": "@nativescript/plugin-seed"
+  "name": "@parempi/couchbase-lite",
+  "version": "1.0.0-alpha.1",
+  "description": "NativeScript Couchbase Lite Plugin",
+  "main": "index",
+  "typings": "index.d.ts",
+  "nativescript": {
+    "platforms": {
+      "android": "6.0.0"
+    }
+  },
+  "plugin": {
+    "nan": "true",
+    "pan": "true",
+    "core3": "true",
+    "core4": "true",
+    "core5": "true",
+    "core6": "true",
+    "vue": "true",
+    "svelte": "false",
+    "react": "true",
+    "webpack": "false",
+    "category": "Database",
+    "wrapper": ""
+  },
+  "demo": "https://github.com/Alexander-Bliznyuk/nativescript-plugins/tree/master/apps/demo",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Alexander-Bliznyuk/nativescript-plugins.git"
+  },
+  "keywords": [
+    "NativeScript",
+    "JavaScript",
+    "TypeScript",
+    "Android",
+    "couchbase",
+    "couchbase mobile",
+    "couchbase lite",
+    "nosql",
+    "sql",
+    "document-oriented",
+    "database",
+    "async",
+    "transactions",
+    "replication"
+  ],
+  "author": "Alexander Bliznyuk",
+  "bugs": {
+    "url": "https://github.com/Alexander-Bliznyuk/nativescript-plugins/issues"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/Alexander-Bliznyuk/nativescript-plugins/tree/master/packages/couchbase-lite",
+  "readmeFilename": "README.md",
+  "bootstrapper": "@nativescript/plugin-seed"
 }
