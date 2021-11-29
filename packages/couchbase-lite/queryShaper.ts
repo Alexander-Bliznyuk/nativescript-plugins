@@ -53,6 +53,14 @@ abstract class AbstractQueryShaper {
     const query = this.buildQuery(this.select(...props));
     return fetcher(query);
   }
+
+  protected getSelectAllExpressions(): SelectResult[] {
+    if (this.db.alias === undefined) {
+      return [cbl.SelectResult.all(), cbl.SelectResult.expression(cbl.Meta.id)];
+    } else {
+      return [cbl.SelectResult.all().from(this.db.alias), cbl.SelectResult.expression(cbl.Meta.id.from(this.db.alias))];
+    }
+  }
 }
 
 export class QueryShaper extends AbstractQueryShaper {
@@ -67,7 +75,7 @@ export class QueryShaper extends AbstractQueryShaper {
 
   rows(...props: SelectResult[]): Promise<Iterable<MutableDictionaryInterface>> {
     if (props.length === 0) {
-      return this.fetch(fetchAll, cbl.SelectResult.all(), cbl.SelectResult.expression(cbl.Meta.id));
+      return this.fetch(fetchAll,  ...this.getSelectAllExpressions());
     }
     return this.fetch(fetch, ...props);
   }
@@ -92,7 +100,7 @@ class JsonShaper extends AbstractQueryShaper {
 
   rows(...props: SelectResult[]): Promise<string> {
     if (props.length === 0) {
-      return this.fetch(fetchAllAsJson, cbl.SelectResult.all(), cbl.SelectResult.expression(cbl.Meta.id));
+      return this.fetch(fetchAllAsJson, ...this.getSelectAllExpressions());
     }
     return this.fetch(fetchAsJson, ...props);
   }
