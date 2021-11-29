@@ -1,7 +1,7 @@
 import {getJsObjectMock,} from "./jsObjectOperationsMock";
 import {cbl, saveInBatch} from ".";
 import {getCompliantDocument, objToCblDoc} from "./toNativeCblConverter";
-import {QueryShaper} from "./queryShaper";
+import {QueryShaper} from "./QueryShaper";
 import MutableDocument = com.couchbase.lite.MutableDocument;
 import Database = com.couchbase.lite.Database;
 import DataSource = com.couchbase.lite.DataSource;
