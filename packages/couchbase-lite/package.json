@@ -1,29 +1,29 @@
 {
   "name": "@parempi/couchbase-lite",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "NativeScript Couchbase Lite Plugin",
   "main": "index",
   "typings": "index.d.ts",
   "nativescript": {
     "platforms": {
       "android": "6.0.0"
-    }
+    },
+    "plugin": {
+      "nan": "true",
+      "pan": "true",
+      "core3": "true",
+      "core4": "true",
+      "core5": "true",
+      "core6": "true",
+      "vue": "true",
+      "svelte": "false",
+      "react": "true",
+      "webpack": "false",
+      "category": "Database",
+      "wrapper": ""
+    },
+    "demo": "https://github.com/Alexander-Bliznyuk/nativescript-plugins/tree/master/apps/demo"
   },
-  "plugin": {
-    "nan": "true",
-    "pan": "true",
-    "core3": "true",
-    "core4": "true",
-    "core5": "true",
-    "core6": "true",
-    "vue": "true",
-    "svelte": "false",
-    "react": "true",
-    "webpack": "false",
-    "category": "Database",
-    "wrapper": ""
-  },
-  "demo": "https://github.com/Alexander-Bliznyuk/nativescript-plugins/tree/master/apps/demo",
   "repository": {
     "type": "git",
     "url": "https://github.com/Alexander-Bliznyuk/nativescript-plugins.git"
