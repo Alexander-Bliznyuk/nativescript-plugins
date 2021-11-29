@@ -86,7 +86,7 @@ export function getCompliantDocument(document: POJODoc | MutableDocument): Mutab
   }
 }
 
-function toNativeDate(date: Date) {
+export function toNativeDate(date: Date) {
   if (isAndroid) {
     return new java.util.Date(date.getTime());
   } else if (isIOS) {
