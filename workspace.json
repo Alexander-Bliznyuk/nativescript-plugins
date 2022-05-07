@@ -119,6 +119,7 @@
             "assets": [
               "packages/couchbase-lite/*.md",
               "packages/couchbase-lite/index.d.ts",
+              "packages/couchbase-lite/sdk.d.ts",
               "LICENSE",
               {
                 "glob": "**/*",
