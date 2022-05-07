@@ -40,12 +40,13 @@ const arrTraps = {
   },
 
   getOwnPropertyDescriptor(target: MutableArrayInterface, prop) {
-    const isAvailable = prop === 'length' || prop < target.count();
-    return {
-      writable: isAvailable,
-      enumerable: isAvailable,
-      configurable: isAvailable,
-    };
+    if (prop === 'length' || prop < target.count()) {
+      return {
+        writable: true,
+        enumerable: true,
+        configurable: true,
+      };
+    }
   },
 
   has(target: MutableArrayInterface, index) {
@@ -76,12 +77,13 @@ const dictTraps = {
   },
 
   getOwnPropertyDescriptor(target: MutableDictionaryInterface, prop) {
-    const isAvailable = target.contains(prop);
-    return {
-      writable: isAvailable,
-      enumerable: isAvailable,
-      configurable: isAvailable,
-    };
+    if (target.contains(prop)) {
+      return {
+        writable: true,
+        enumerable: true,
+        configurable: true,
+      };
+    }
   },
 
   has(target: MutableDictionaryInterface, prop) {
