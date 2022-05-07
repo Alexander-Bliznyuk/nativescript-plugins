@@ -111,7 +111,11 @@ public class QueryService {
   }
 
   private static Object fetchValue(Query query) throws CouchbaseLiteException {
-    return query.execute().next().getValue(0);
+    Result result = query.execute().next();
+    if (result == null) {
+      return null;
+    }
+    return result.getValue(0);
   }
 
   public static void fetchValue(Query query, Promise promise) {
