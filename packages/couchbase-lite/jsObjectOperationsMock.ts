@@ -134,7 +134,11 @@ export function getJsObjectMock(cblNativeValue) {
 
 function getCblValue(cblNativeObj, key) {
   if (cblNativeObj instanceof MutableArrayInterface) {
-    key = parseInt(key);
+    const intKey = parseInt(key);
+    if (isNaN(intKey) || intKey !== 0 && intKey != key) {
+      throw new TypeError('Cbl array key must be an integer, got ' + key);
+    }
+    key = intKey;
   }
   const value = cblNativeObj.getValue(key);
 
